@@ -1,0 +1,375 @@
+$breakpoint-xl: 87.5rem; // 4k and hi-res desktop
+$breakpoint-lg: 60rem; // 1080 and hi-res laptops
+$breakpoint-md: 40rem; // hi-res tablets and low-res laptops
+$breakpoint-sm: 28rem; // mobile and low-res tablets
+$breakpoint-xs: 20rem; // mobile only
+
+$unit: rem;
+
+$zIndex-top: 999;
+$zIndex-middle: 99;
+$zIndex-bottom: 9;
+
+@mixin borderBoxBlock {
+    display: block;
+    box-sizing: border-box;
+}
+
+@mixin flexBox {
+    display: flex;
+}
+
+@mixin noOverflow {
+    overflow: hidden;
+}
+
+@mixin flexBoxRow {
+    @include flexBox;
+    flex-flow: row nowrap;
+    align-items: stretch;
+    align-content: stretch;
+}
+
+@mixin flexBoxColumn {
+    @include flexBoxRow;
+    flex-flow: column nowrap;
+}
+
+@mixin noPadding {
+    padding: 0;
+}
+
+@mixin noMargin {
+    margin: 0;
+}
+
+@mixin Top {
+    z-index: $zIndex-top;
+}
+
+@mixin Middle {
+    z-index: $zIndex-middle;
+}
+
+@mixin Behind {
+    z-index: $zIndex-bottom;
+}
+
+@mixin breakpoint($queryMin) {
+    @media screen and (min-width: +$queryMin) {
+        @content;
+    }
+}
+
+@mixin md {
+    @include breakpoint($breakpoint-md) {
+        @content;
+    }
+ }
+
+@mixin sm {
+    @include breakpoint($breakpoint-sm) {
+        @content;
+    }
+ }
+
+ @mixin xs {
+    @include breakpoint($breakpoint-xs) {
+        @content;
+    }
+ }
+
+ @mixin lg {
+    @include breakpoint($breakpoint-lg) {
+        @content;
+    }
+ }
+
+@mixin noScrollBar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    ::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+html, 
+body {
+    @include noScrollBar;
+}
+
+body {
+    font-size: 62.5%;
+
+    @include md {
+        background-color: red;
+    }
+    @include xs {
+        background-color: green;
+    }
+    @include lg {
+        background-color: blue;
+    }
+}
+
+h1 {
+    font-size: 2.4+$unit;
+
+    @include xs {
+        font-size: 1.4+$unit;
+    }
+    @include md {
+        font-size: 2+$unit;
+    }
+}
+
+h2 {
+    font-size: 2+$unit;
+    text-align: center;
+
+    @include xs {
+        font-size: 1.4+$unit;
+    }
+    @include md {
+        font-size: 1.8+$unit;
+    }
+}
+
+h3 {
+    font-size: 1.4+$unit;
+    text-align: center;
+
+    @include xs {
+        font-size: .8+$unit;
+    }
+    @include md {
+        font-size: 1+$unit;
+    }
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+.vid, .img {
+    @include noPadding;
+    @include noMargin;
+
+    @include xs {
+        min-height: max(100%, #{8+$unit});
+    }
+    @include md {
+        object-fit: cover;
+        min-width: max(100%, #{12+$unit});
+    }
+    @include lg {
+        object-fit: contain;
+    }
+
+    width: auto;
+    height: 100%;
+    object-fit: contain;
+}
+
+.containerXL {
+    height: 20em;
+    width: 20em;
+}
+
+.containerSM {
+    height: 20em;
+    width: 20em;
+}
+
+.containerWide {
+    height: 60em;
+    width: 120em;
+}
+
+.containerSquashed {
+    height: 20em;
+    width: 120em;
+}
+
+.containerNarrow {
+    height: 120em;
+    width: 25em;
+    cursor: url('logo-white.png') auto;
+}
+
+.VisibilityChange {
+    transform: translateY(30%);
+    opacity: .1;
+    
+    &--Visible {
+        transition: all .25s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+        transform: translateY(0%);
+        opacity: 1;
+    }
+}
+
+.Hero {
+    &_Container {
+        &-Wrapper {
+            @include Middle;
+            @include flexBoxColumn;
+
+            @include xs {
+                padding: min(1%, #{1 + $unit}) 0;
+                min-height: 6em;
+            }
+
+            @include md {
+                padding: min(1.5%, #{1.5 + $unit}) 0;
+                min-height: 10em;
+                max-height: unset;
+            }
+
+            flex: 1 1 100%;
+            height: 100%;
+
+            padding: min(2%, #{2 + $unit}) 0;
+            position: relative;
+
+            min-width: 10%;
+            max-width: min(100%, 100vw);
+        
+            min-height: max(20vh, #{15 + $unit});
+            max-height: min(100vh, 100%);
+
+            &-Title {
+                @include Middle;
+
+                @include xs {
+                    font-size: 1+$unit;
+                    transform: translate(-50%, -100%);
+                }
+                @include md {
+                    font-size: 1.3+$unit;
+                    transform: translate(-50%, -80%);
+                }
+
+                position: absolute;
+                left: 50%;
+                top: 0;
+                transform: translate(-50%, -50%);
+                color: #fff;
+            }
+    
+            &--Animated:hover {
+                &::after {
+                    @include Top;
+                    @include borderBoxBlock;
+
+                    $animatedHeight: min(25%, #{5 + $unit});
+                    $transformCommon: translate(-50%, -50%);
+    
+                    @keyframes topToDown {
+                        0% {
+                            transform: $transformCommon + scaleY(0);
+                        }
+                        40% {
+                            transform: $transformCommon + scaleY(.5);
+                        }
+                        85% {
+                            top: $animatedHeight;
+                            transform: $transformCommon + scaleY(0);
+                        }
+                        100% {
+                            top: $animatedHeight;
+                            transform: $transformCommon + scaleY(0);
+                        }
+                    }
+    
+                    @include sm {
+                        width: .12+$unit;
+                        box-shadow: .1+$unit .1+$unit .05+$unit #000;
+                    }
+
+                    content: '';
+                    opacity: .8;
+                    position: absolute;
+                    top: 0;
+                    left: 50%;
+                    transform: $transformCommon;
+                    will-change: top, transform;
+                    height: $animatedHeight;
+                    background-color: #fff;
+                    box-shadow: .2+$unit .2+$unit .1+$unit #000;
+    
+                    animation: 2s cubic-bezier(0, 0.42, 0.2, 0.99) infinite topToDown;
+                    width: .22+$unit;
+                }
+            }
+        }
+        
+        @include borderBoxBlock;
+        @include noPadding;
+        @include noScrollBar;
+        @include flexBoxRow;
+        @include noOverflow;
+
+        @include xs {
+            @include noMargin;
+        }
+        @include sm {
+            margin: 0 1+$unit;
+        }
+    
+        background: transparent;
+        flex: 1 1 100%;
+    }
+
+    &_Slides-Container {
+        @include borderBoxBlock;
+
+        position: relative;
+        width: 100%; 
+    }
+    &_Slide {
+        @include Behind;
+        @include noPadding;
+        @include borderBoxBlock;
+        @include noOverflow;
+        @include flexBoxColumn;
+
+        justify-content: center;
+        align-items: center;
+
+        position: absolute;
+        left: 0;
+        top: 0;
+        
+        min-width: 10%;
+        width: 100%;
+        max-width: 100%;
+
+        min-height: 10%;
+        height: 100%;
+        max-height: 100%;
+
+        &__Title {
+            @include noPadding;
+            @include Top;
+
+            @include xs {
+                font-size: .6+$unit;
+            }
+
+            @include md {
+                font-size: .8+$unit;
+            }
+            
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            &--center {
+                top: 50%;
+                transform: translateY(-50%);
+            }
+        }
+    }
+}
